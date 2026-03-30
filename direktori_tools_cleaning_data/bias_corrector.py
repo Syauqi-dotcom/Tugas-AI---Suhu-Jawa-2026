@@ -125,7 +125,6 @@ def apply_bias_correction(historical_file: str, rcp_file: str,
 def main():
     parser = argparse.ArgumentParser(description="EDCDF Bias Correction CORDEX")
     parser.add_argument("--historical",  required=True)
-    parser.add_argument("--rcp45",       required=True)
     parser.add_argument("--rcp85",       required=True)
     parser.add_argument("--output_dir",  required=True)
     args = parser.parse_args()
@@ -139,13 +138,6 @@ def main():
     hist_out = os.path.join(args.output_dir, "historical_corrected.csv")
     df_hist.to_csv(hist_out, index=False)
     print(f"  Historis disalin ke: {hist_out}")
-
-    # Koreksi RCP4.5
-    apply_bias_correction(
-        args.historical,
-        args.rcp45,
-        os.path.join(args.output_dir, "rcp45_corrected.csv"),
-    )
 
     # Koreksi RCP8.5
     apply_bias_correction(

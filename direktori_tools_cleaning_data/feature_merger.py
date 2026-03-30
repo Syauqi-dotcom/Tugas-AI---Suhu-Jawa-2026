@@ -5,7 +5,7 @@ Gabungkan beberapa CSV prediktor menjadi satu DataFrame fitur (X).
 Terinspirasi dari struktur pipeline aminst/wits.
 
 Input : beberapa CSV dengan kolom 'time' + variabel
-Output: X_historical.csv (atau X_rcp45.csv, X_rcp85.csv)
+Output: X_historical.csv (atau X_rcp85.csv)
 
 Referensi:
   - Pipeline wits: https://github.com/aminst/wits
