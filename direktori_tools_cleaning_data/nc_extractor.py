@@ -106,21 +106,39 @@ def extract_java_mean(nc_file: str, var_name: str) -> tuple:
     time_var = ds.variables["time"]
     times = nc.num2date(time_var[:], time_var.units,
                         calendar=getattr(time_var, "calendar", "standard"))
-    times = [pd.Timestamp(t.year, t.month, getattr(t, "day", 1)) for t in times]
+    
+    times_pd = []
+    for t in times:
+        day = getattr(t, "day", 1)
+        try:
+            times_pd.append(pd.Timestamp(t.year, t.month, day))
+        except ValueError:
+            # Tangani error kalender 360_day (misal: 30 Februari)
+            times_pd.append(pd.Timestamp(t.year, t.month, 28))
+    times = times_pd
 
-    # Variabel
+    # Temukan batas index untuk subset CORDEX-SEA (Hanya load pulau Jawa dari disk!)
+    lat_idx = np.where(lat_mask)[0]
+    lon_idx = np.where(lon_mask)[0]
+    
+    if len(lat_idx) == 0 or len(lon_idx) == 0:
+        ds.close()
+        return None, None
+        
+    lat_slice = slice(lat_idx[0], lat_idx[-1] + 1)
+    lon_slice = slice(lon_idx[0], lon_idx[-1] + 1)
+
+    # Variabel (Tarik LANGSUNG subset dari disk, jangan tarik seluruh peta Asia Tenggara: 50GB -> 10MB)
     if var_name not in ds.variables:
         ds.close()
         return None, None
 
-    data = ds.variables[var_name][:]  # shape: (time, lat, lon)
-    if hasattr(data, "data"):
-        data = np.ma.filled(data, np.nan)
+    # Load subset (time, lat_Jawa, lon_Jawa)
+    subset = ds.variables[var_name][:, lat_slice, lon_slice] 
+    if hasattr(subset, "data"):
+        subset = np.ma.filled(subset, np.nan)
 
-    # Subset & mean spasial
-    lat_idx = np.where(lat_mask)[0]
-    lon_idx = np.where(lon_mask)[0]
-    subset = data[:, lat_idx, :][:, :, lon_idx]  # (time, lat_J, lon_J)
+    # Rata-rata spasial
     values = np.nanmean(subset, axis=(1, 2))      # (time,)
 
     # Konversi
