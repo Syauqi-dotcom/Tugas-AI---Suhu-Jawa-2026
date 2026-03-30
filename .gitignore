@@ -1,4 +1,4 @@
-data
+data/raw  
 results
 .cdsapirc
 __pycache__/
