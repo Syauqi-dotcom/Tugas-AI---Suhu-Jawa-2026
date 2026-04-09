@@ -79,7 +79,7 @@ chmod +x data_pipeline.sh
 
 ```bash
 cd notebooks
-jupyter notebook 02_main_analysis.ipynb
+jupyter notebook workspace.ipynb
 ```
 
 ---
