@@ -1,8 +1,7 @@
 # Pemodelan Prediksi Suhu Permukaan Jawa
-## Regresi Linear Multivariat (Normal Equation + Ridge) | Data CORDEX-CMIP5
+## Regresi Linear Multivariat (Normal Equation + Ridge)
 
 > **Sumber data**: [CDS Copernicus](https://cds.climate.copernicus.eu/)  
-> **Pendekatan**: Dari scratch — NumPy, Pandas, Matplotlib  
 > **Penjelasan Singkat**: Proyek ini memecahkan masalah prediksi iklim dengan solusi analitik (deterministik) menggunakan Regresi Linear Multivariat (Normal Equation + Ridge) pada data CORDEX-CMIP5.
 
 ---
@@ -12,8 +11,7 @@
 ```
 jawa-suhu-cordex/
 │
-├── data_pipeline.sh              ← Pipeline utama (Linux/macOS)
-├── data_pipeline.ps1             ← Pipeline utama (Windows/PowerShell)
+├── data_pipeline.sh              ← Pipeline data
 │
 ├── data/
 │   ├── raw/
@@ -41,9 +39,7 @@ jawa-suhu-cordex/
 │   ├── metrics/                  ← CSV evaluation report + prediksi
 │   └── models/                   ← weights.npz, normalizer, meta.json
 │
-├── tmp_folder/                   ← Data temporari (raw CSV)
 │
-├── requirements.txt
 └── README.md
 ```
 
@@ -77,9 +73,6 @@ Pastikan sudah menerima **Terms of Use** dataset di website CDS sebelum download
 # Linux / macOS
 chmod +x data_pipeline.sh
 ./data_pipeline.sh
-
-# Windows / PowerShell
-.\data_pipeline.ps1
 ```
 
 ### 4. Jalankan Notebook Interaktif
@@ -167,7 +160,7 @@ Tahap terakhir adalah menguji prediksi model ($\hat{y}$) pada data Test.
 
 ---
 
-### Data
+### Data diambil saat scrapping di website CORDEX
 
 | Aspek | Detail |
 |---|---|
@@ -188,8 +181,6 @@ Tahap terakhir adalah menguji prediksi model ($\hat{y}$) pada data Test.
 |---|---|---|
 | [Book] | Hastie, T., Tibshirani, R., & Friedman, J. (2009). The Elements of Statistical Learning: Data Mining, Inference, and Prediction | [(2nd edition)](https://z-library.im/book/nY5V6QyA53/the-elements-of-statistical-learning-data-mining-inference-and-prediction-2nd-edition-12print.html) |
 | [CORDEX-DL-PRED] | Regional Climate Model + DL Bias Correction | [arXiv:2504.19145](https://arxiv.org/html/2504.19145) |
-| [TEMP-DOWNSCALING] | ML for Statistical Downscaling | [arXiv:1902.02865](https://arxiv.org/abs/1902.02865) |
-| [CLIMATE-INV-ML] | Climate-Invariant Machine Learning | [arXiv:2112.08440](https://arxiv.org/abs/2112.08440) |
 
 ---
 
@@ -197,20 +188,10 @@ Tahap terakhir adalah menguji prediksi model ($\hat{y}$) pada data Test.
 
 ```
 results/figures/
-  ├── eda_timeseries.png              ← EDA: time series variabel iklim
-  ├── eda_correlation_matrix.png      ← Matriks korelasi Pearson
-  ├── evaluation_result.png           ← Pred vs aktual, scatter, residual
-  ├── feature_importance.png          ← Top 15 fitur
-  └── proyeksi_suhu_jawa_2050.png     ← Proyeksi 1986–2050
 
 results/metrics/
-  ├── evaluation_report.csv           ← MSE, RMSE, MAE, R²
-  └── test_predictions.csv            ← Aktual vs prediksi per bulan
+  └── evaluation_report.csv           ← MSE, RMSE, MAE, R²
 
 results/models/
-  ├── weights.npz                     ← Bobot model
-  ├── normalizer_X.npz                ← Parameter Z-score
-  ├── target_stats.npy                ← [mean, std] target
   ├── feature_importance.csv          ← Ranking fitur
-  └── meta.json                       ← Metadata model
 ```
